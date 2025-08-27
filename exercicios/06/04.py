@@ -5,47 +5,49 @@ import pandas as pd
 
 # %%
 
-transacoes = pd.read_csv("../../data/transacoes.csv")
+transacoes = pd.read_csv("../../data/transacoes.csv",sep=";")
 transacoes.head()
 
 # %%
-transacao_produto = pd.read_csv("../../data/transacao_produto.csv")
+transacao_produto = pd.read_csv("../../data/transacao_produto.csv",sep=";")
 transacao_produto.head()
 
 # %%
-produtos = pd.read_csv("../../data/produtos.csv")
+produtos = pd.read_csv("../../data/produtos.csv",sep=";")
 produtos.head()
 
 # %%
 
 cliente_transacao_produto = transacoes.merge(
     transacao_produto,
-    on="idTransacao",
+    on="IdTransacao",
     how="left",
-)[['idTransacao', "idCliente", "idProduto"]]
+)[['IdTransacao', "IdCliente", "IdProduto"]]
 
 df_full = cliente_transacao_produto.merge(
     produtos,
-    on=['idProduto'],
+    left_on=['IdProduto'], right_on=['IdProduto'],
     how='left',
 )
 
-df_full = df_full[df_full["descProduto"]=="Presença Streak"]
+df_full = df_full[df_full["DescProduto"]=="Presença Streak"]
 
-(df_full.groupby(by=["idCliente"])["idTransacao"]
+(df_full.groupby(by=["IdCliente"])["IdTransacao"]
         .count()
         .sort_values(ascending=False)
         .head(1)
 )
-
+df_full
 # %%
 
-produtos = produtos[produtos["descProduto"]=="Presença Streak"]
+produtos = produtos[produtos["DescProduto"]=="Presença Streak"]
 
-(transacoes.merge(transacao_produto, on=["idTransacao"], how="left")
-           .merge(produtos, on=["idProduto"], how="inner")
-           .groupby(by="idCliente")["idTransacao"]
+(transacoes.merge(transacao_produto, on=["IdTransacao"], how="left")
+           .merge(produtos, on=["IdProduto"], how="inner")
+           .groupby(by="IdCliente")["IdTransacao"]
            .count()
            .sort_values(ascending=False)
-           .head(1)
+           .head(5)
 )
+# %%
+
