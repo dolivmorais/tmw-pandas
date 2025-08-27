@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 def read_file(file_name:str):
-    df = (pd.read_csv(f"../../data/ipea/{file_name}.csv", sep=";")
+    df = (pd.read_csv(f"../../data-ipea/ipea/{file_name}.csv", sep=";")
             .rename(columns={"valor":file_name})
             .set_index(["nome", "período"])
             .drop(["cod"],axis=1))
@@ -11,7 +11,7 @@ def read_file(file_name:str):
     return df
 
 # %%
-file_names = os.listdir("../../data/ipea/")
+file_names = os.listdir("../../data-ipea/ipea/")
 
 dfs = []
 for i in file_names:

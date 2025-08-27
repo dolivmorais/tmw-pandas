@@ -1,0 +1,21 @@
+import pandas as pd
+import os
+
+def read_file(file_nema:str):
+    df = (pd.read_csv(f"../../data-ipea/ipea/{file_nema}.csv",sep=";")
+            .rename(columns={"valor":file_nema})
+            .set_index(["nome","período"])
+            .drop(["cod"], axis=1))
+    return df
+#%%
+file_names = os.listdir("../../data-ipea/ipea/")
+#%%
+dfs= []
+for i in file_names:
+    file_name = i.split(".")[0]
+    dfs.append(read_file(file_name))
+
+# %%
+df_full = pd.concat(dfs,axis=1).reset_index().sort_values(["período","nome"])
+df_full
+# %%
